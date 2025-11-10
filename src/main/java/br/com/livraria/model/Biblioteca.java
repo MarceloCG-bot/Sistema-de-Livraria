@@ -2,7 +2,6 @@ package br.com.livraria.model;
 
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Representa a biblioteca, com listas de autores, livros e empréstimos.
@@ -20,19 +19,23 @@ public class Biblioteca {
     }
 
     private void inicializarDados() {
-        // Autores
+        // ---------- AUTORES ----------
         Autor machado = new Autor(1, "Machado de Assis", LocalDate.of(1839, 6, 21));
         Autor clarice = new Autor(2, "Clarice Lispector", LocalDate.of(1920, 12, 10));
         Autor jorge = new Autor(3, "Jorge Amado", LocalDate.of(1912, 8, 10));
+        Autor graciliano = new Autor(4, "Graciliano Ramos", LocalDate.of(1892, 10, 27));
+        Autor jane = new Autor(5, "Jane Austen", LocalDate.of(1775, 12, 16));
 
-        autores.addAll(List.of(machado, clarice, jorge));
+        autores.addAll(List.of(machado, clarice, jorge, graciliano, jane));
 
-        // Livros
+        // ---------- LIVROS ----------
         Livro domCasmurro = new Livro(1, "Dom Casmurro", machado);
         Livro horaEstrela = new Livro(2, "A Hora da Estrela", clarice);
         Livro gabriela = new Livro(3, "Gabriela, Cravo e Canela", jorge);
+        Livro vidasSecas = new Livro(4, "Vidas Secas", graciliano);
+        Livro orgulhoPreconceito = new Livro(5, "Orgulho e Preconceito", jane);
 
-        livros.addAll(List.of(domCasmurro, horaEstrela, gabriela));
+        livros.addAll(List.of(domCasmurro, horaEstrela, gabriela, vidasSecas, orgulhoPreconceito));
     }
 
     // ---------- Acesso seguro às listas (somente leitura) ----------
@@ -86,11 +89,13 @@ public class Biblioteca {
         String t = termo.trim().toLowerCase();
         return livros.stream()
                 .filter(l -> l.getTitulo().toLowerCase().contains(t))
-                .collect(Collectors.toList());
+                .toList(); // ✅ retorna lista imutável
     }
 
     public List<Livro> listarLivrosDisponiveis() {
-        return livros.stream().filter(Livro::isDisponivel).collect(Collectors.toList());
+        return livros.stream()
+                .filter(Livro::isDisponivel)
+                .toList(); // ✅ lista imutável
     }
 
     // ---------- Empréstimo / Devolução ----------
